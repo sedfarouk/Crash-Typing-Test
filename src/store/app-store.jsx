@@ -10,7 +10,7 @@ const AppCtx = createContext({
 	numbersSwitch: false,
 	timerInterval: DEFAULT_TIMER_INTERVAL,
 	selectedText: DEFAULT_SENTENCE,
-	gameStart: false,
+	gameStatus: "not started",
 	handleNumbersSwitch: () => null,
 	handlePunctuationSwitch: () => null,
 	handleTimerIntervalChange: () => null,
@@ -23,12 +23,12 @@ const AppContextProvider = ({ children }) => {
 	const [numbersSwitch, setNumbersSwitch] = useState(false);
 	const [timerInterval, setTimerInterval] = useState(DEFAULT_TIMER_INTERVAL);
 	const [selectedText, setSelectedText] = useState(DEFAULT_SENTENCE);
-	const [gameStart, setGameStart] = useState(false);
+	const [gameStart, setGameStart] = useState("not started");
 
 	useEffect(() => {
 		let interval;
 
-		if (gameStart) {
+		if (gameStart === "started") {
 			interval = setInterval(() => {
 				setTimerInterval(prevRemainingTime => {
 					if (prevRemainingTime <= 1) {
@@ -38,6 +38,8 @@ const AppContextProvider = ({ children }) => {
 					return prevRemainingTime - 1;
 				});
 			}, 1000);
+
+			setGameStart("over");
 		}
 		return () => clearInterval(interval);
 	}, [gameStart]);
@@ -55,8 +57,9 @@ const AppContextProvider = ({ children }) => {
 		setTimerInterval(newInterval);
 	}
 
-	function handleGameStart() {
-		setGameStart(prev => !prev);
+	function handleGameStart(option) {
+		console.log(gameStart);
+		setGameStart(option);
 	}
 
 	function handleSetSelectedText(newText) {
