@@ -1,4 +1,4 @@
-{
+const SENTENCES = {
   "easy": {
     "plain": [
       "the sun rose slowly above the quiet hills spreading its light across the fields and the trees while the birds began to sing and the gentle wind moved through the grass making the morning feel calm and peaceful for everyone who stepped outside to begin their day",
@@ -269,3 +269,5 @@
     ]
   }
 }
+
+export default SENTENCES;
