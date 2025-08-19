@@ -4,7 +4,7 @@ import Menu from "./Menu";
 export default function Main() {
 	return <main className="flex flex-col justify-start gap-20 h-full lg:mx-10">
 		<Menu />
-		<article id="type-content">
+		<article id="type-content" className="text-muted-foreground">
 			<p className="text-2xl">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum, architecto esse quod quae similique amet, ea commodi aut dolorum molestiae quos. Expedita dolorem dicta voluptatum, deleniti numquam eaque ea architecto.</p>
 		</article>
 		<article id="type-input">

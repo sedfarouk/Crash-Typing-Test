@@ -3,12 +3,9 @@ import Main from "@/components/Main";
 
 export default function HomePage() {
   return (
-    <main className="main flex flex-col justify-center mx-auto h-full lg:w-5/9 w-4/5 my-5">
+    <main className="main flex flex-col justify-between mx-auto h-full lg:w-5/9 w-4/5 my-5">
       <Header />
       <Main />
-      <footer>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi obcaecati quae fuga, similique mollitia eaque dolorum enim suscipit omnis nostrum.
-      </footer>
     </main>
   );
 }
