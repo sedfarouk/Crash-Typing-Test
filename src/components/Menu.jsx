@@ -18,7 +18,7 @@ export default function Menu() {
     if (configurePunctuation && configureNumbers) newMode = 'punctuation&numbers';
     else if (configurePunctuation) newMode = 'punctuation';
     else if (configureNumbers) newMode = 'numbers';
-    else newMode = 'plain'; 
+    else newMode = 'plain';
 
     appCtx.handleMode(newMode);
   }, [configurePunctuation, configureNumbers]);
@@ -81,7 +81,6 @@ export default function Menu() {
           </nav>
         )}
 
-        {/* Difficulty Selection */}
         {configureMode && (
           <nav className="flex gap-3">
             {["easy", "medium", "hard"].map((d) => (
@@ -98,7 +97,10 @@ export default function Menu() {
 
       </section>
 
-      <h3 className="text-3xl font-semibold text-amber-600">{appCtx.timerInterval} s</h3>
+      <section id='time-and-shuffle' className='flex justify-between items-center'>
+        <h3 className="text-3xl font-semibold text-amber-600">{appCtx.timerInterval} s</h3>
+        <i className="fa-solid fa-shuffle text-xl cursor-pointer" onClick={appCtx.handleGameRestart}></i>
+      </section>
     </>
   );
 }
