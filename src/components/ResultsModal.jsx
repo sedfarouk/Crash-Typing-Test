@@ -61,6 +61,8 @@ const AnimatedCounter = ({ value, duration = 1000, suffix = "" }) => {
   return <span>{Math.round(count)}{suffix}</span>
 }
 
+
+
 export default function ResultsModal({onClose, results}) {
   const appCtx = useContext(AppCtx);
   const [showDetails, setShowDetails] = useState(false)
