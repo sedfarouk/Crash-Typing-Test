@@ -18,15 +18,19 @@ const AppCtx = createContext({
 const AppContextProvider = ({ children }) => {
 	const [mode, setMode] = useState(localStorage.getItem("mode") || "plain");
 	const [timerInterval, setTimerInterval] = useState(+(localStorage.getItem("timer_interval") || "15"));
-	const [selectedText, setSelectedText] = useState(getSelectedText());
+	const [selectedText, setSelectedText] = useState("");
 	const [gameMode, setGameMode] = useState(localStorage.getItem("difficulty") || "easy");
 	const [gameStatus, setGameStatus] = useState("not started");
 
+	useEffect(() => {
+		setSelectedText(getSelectedText());
+	}, []);
+
 	function getSelectedText() {
-		const difficulty = localStorage.getItem("difficulty").toLowerCase() || gameMode;
-		const mode = localStorage.getItem("mode") || mode;
-		const length = SENTENCES[difficulty][mode].length;
-		const sentence = SENTENCES[difficulty][mode][Math.floor(Math.random() * length)];
+		const currentDifficulty = localStorage.getItem("difficulty") || gameMode;
+		const currentMode = localStorage.getItem("mode") || mode;
+		const length = SENTENCES[currentDifficulty][currentMode].length;
+		const sentence = SENTENCES[currentDifficulty][currentMode][Math.floor(Math.random() * length)];
 
 		return sentence;
 	}
@@ -77,6 +81,8 @@ const AppContextProvider = ({ children }) => {
 
 	function handleGameRestart() {
 		setSelectedText(getSelectedText());
+		const currentTimer = +(localStorage.getItem("timer_interval") || "15");
+		setTimerInterval(currentTimer);
 		setGameStatus("not started");
 	}
 
