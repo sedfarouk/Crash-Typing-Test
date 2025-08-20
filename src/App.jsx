@@ -6,13 +6,13 @@ import { Analytics } from "@vercel/analytics/next"
 
 function App() {
   return (
-    <Analytics>
-      <AppContextProvider>
-        <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
+    <AppContextProvider>
+      <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
+        <Analytics>
           <HomePage />
-        </ThemeProvider>
-      </AppContextProvider>
-    </Analytics>
+        </Analytics>
+      </ThemeProvider>
+    </AppContextProvider>
   )
 }
 
