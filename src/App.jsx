@@ -8,9 +8,8 @@ function App() {
   return (
     <AppContextProvider>
       <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
-        <Analytics>
           <HomePage />
-        </Analytics>
+        <Analytics />
       </ThemeProvider>
     </AppContextProvider>
   )
