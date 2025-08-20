@@ -93,6 +93,7 @@ export default function Main() {
 		if (isGameActive && timeRemaining <= 0 && !isGameOver) {
 			appCtx.handleGameStatus("finished");
 		}
+		
 	}, [timeRemaining, isGameActive, isGameOver, appCtx]);
 
 	useEffect(() => {
