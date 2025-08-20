@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer className="bg-card/50 backdrop-blur border-t mt-20">
       <div className="max-w-6xl mx-auto px-4 py-5">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           
           <div className="space-y-4">
             <div className="flex items-center gap-3">
@@ -47,6 +47,24 @@ export default function Footer() {
               <li className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
                 <Keyboard className="h-4 w-4" />
                 <span>Multiple Text Options</span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Expected Features for the Future!</h3>
+            <ul className="space-y-2">
+              <li className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <span>User Authentication & Management</span>
+              </li>
+              <li className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <span>Persistent Storage of User Data</span>
+              </li>
+              <li className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <span>Tests Fetching from Real-time Database</span>
+              </li>
+              <li className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <span>...and Many More!</span>
               </li>
             </ul>
           </div>
