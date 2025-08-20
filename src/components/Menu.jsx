@@ -1,29 +1,104 @@
-import { useContext } from 'react';
-import classes from './Menu.module.css';
-import {AppCtx} from '@/store/app-store';
+import { useContext, useState, useEffect } from 'react';
+import { AppCtx } from '@/store/app-store';
 
 export default function Menu() {
   const appCtx = useContext(AppCtx);
 
-  return <>
-    <section id="menu" className={`${classes.menu} flex gap-3 items-center rounded-lg md:h-12 h-17 w-auto mx-auto px-2 py-3 bg-muted text-sm text-muted-foreground`}>
-      <nav className="flex gap-3">
-        <p onClick={appCtx.handlePunctuationSwitch} className={appCtx.punctuationSwitch ? "text-amber-600" : null}>@ punctuation</p>
-        <p onClick={appCtx.handleNumbersSwitch} className={appCtx.numbersSwitch ? "text-amber-600" : null}># numbers</p>
-      </nav>
-      <div className="spacer h-6 rounded-2xl w-0.5 rounded-2 border-none bg-gray-400"></div>
-      <nav className="flex gap-1">
-        <p className="text-amber-600">time</p>
-      </nav>
-      <div className="spacer h-6 rounded-2xl w-0.5 rounded-2 border-none bg-gray-400"></div>
-      <nav className="flex gap-3">
-        <p className={appCtx.timerInterval === 15 ? "text-amber-600" : null} onClick={() => appCtx.handleTimerIntervalChange(15)}>15</p>
-        <p className={appCtx.timerInterval === 30 ? "text-amber-600" : null} onClick={() => appCtx.handleTimerIntervalChange(30)}>30</p>
-        <p className={appCtx.timerInterval === 60 ? "text-amber-600" : null} onClick={() => appCtx.handleTimerIntervalChange(60)}>60</p>
-        <p className={appCtx.timerInterval === 120 ? "text-amber-600" : null} onClick={() => appCtx.handleTimerIntervalChange(120)}>120</p>
-        <p>Custom</p>
-      </nav>
-    </section>
-    <h3 className="text-3xl font-semibold text-amber-600">{appCtx.timerInterval} s</h3>
-  </>
+  const [configurePunctuation, setConfigurePunctuation] = useState(
+    appCtx.gameMode.includes('punctuation')
+  );
+  const [configureNumbers, setConfigureNumbers] = useState(
+    appCtx.gameMode.includes('numbers')
+  );
+  const [configureTimer, setConfigureTimer] = useState(true);
+  const [configureMode, setConfigureMode] = useState(false);
+
+  useEffect(() => {
+    let newMode = '';
+    if (configurePunctuation && configureNumbers) newMode = 'punctuation&numbers';
+    else if (configurePunctuation) newMode = 'punctuation';
+    else if (configureNumbers) newMode = 'numbers';
+    else newMode = 'plain'; 
+
+    appCtx.handleMode(newMode);
+  }, [configurePunctuation, configureNumbers]);
+
+  const getActiveClass = (isActive) =>
+    isActive
+      ? 'text-amber-600'
+      : 'text-muted-foreground hover:text-amber-500 cursor-pointer transition-colors';
+
+  return (
+    <>
+      <section className="flex gap-3 items-center rounded-lg md:h-12 h-17 w-auto mx-auto px-5 bg-muted text-sm text-muted-foreground">
+
+        <nav className="flex gap-3">
+          <p
+            onClick={() => setConfigurePunctuation(prev => !prev)}
+            className={getActiveClass(configurePunctuation)}
+          >
+            @ punctuation
+          </p>
+          <p
+            onClick={() => setConfigureNumbers(prev => !prev)}
+            className={getActiveClass(configureNumbers)}
+          >
+            # numbers
+          </p>
+        </nav>
+
+        <div className="h-6 w-[2px] bg-gray-500 mx-2"></div>
+
+        <nav className="flex gap-3">
+          <p
+            className={`cursor-pointer transition-colors ${configureTimer ? 'text-amber-600' : 'hover:text-amber-500'}`}
+            onClick={() => { setConfigureTimer(prev => !prev); setConfigureMode(false); }}
+          >
+            time
+          </p>
+          <p
+            className={`cursor-pointer transition-colors ${configureMode ? 'text-amber-600' : 'hover:text-amber-500'}`}
+            onClick={() => { setConfigureMode(prev => !prev); setConfigureTimer(false); }}
+          >
+            difficulty
+          </p>
+        </nav>
+
+        <div className="h-6 w-[2px] bg-gray-500 mx-2"></div>
+
+        {configureTimer && (
+          <nav className="flex gap-3">
+            {[15, 30, 60, 120].map((t) => (
+              <p
+                key={t}
+                onClick={() => appCtx.handleTimerIntervalChange(t)}
+                className={`cursor-pointer transition-colors ${appCtx.timerInterval === t ? 'text-amber-600' : 'hover:text-amber-500'}`}
+              >
+                {t}
+              </p>
+            ))}
+            <p className="cursor-pointer hover:text-amber-500 transition-colors">Custom</p>
+          </nav>
+        )}
+
+        {/* Difficulty Selection */}
+        {configureMode && (
+          <nav className="flex gap-3">
+            {["easy", "medium", "hard"].map((d) => (
+              <p
+                key={d}
+                onClick={() => appCtx.handleGameMode(d)}
+                className={`cursor-pointer transition-colors ${appCtx.gameMode.toLowerCase() === d ? 'text-amber-600' : 'hover:text-amber-500'}`}
+              >
+                {d}
+              </p>
+            ))}
+          </nav>
+        )}
+
+      </section>
+
+      <h3 className="text-3xl font-semibold text-amber-600">{appCtx.timerInterval} s</h3>
+    </>
+  );
 }

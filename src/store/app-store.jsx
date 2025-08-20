@@ -1,81 +1,97 @@
 import { useState, createContext, useEffect } from "react"
-import SENTENCES from '../data/data';
-
-const DEFAULT_TIMER_INTERVAL = 15;
-const length = SENTENCES.easy.plain.length;
-const DEFAULT_SENTENCE = SENTENCES.easy.plain[Math.floor(Math.random() * length)];
+import SENTENCES from "@/data/data";
 
 const AppCtx = createContext({
-	punctuationSwitch: false,
-	numbersSwitch: false,
-	timerInterval: DEFAULT_TIMER_INTERVAL,
-	selectedText: DEFAULT_SENTENCE,
+	mode: "",
+	timerInterval: "",
+	selectedText: "",
 	gameStatus: "not started",
-	handleNumbersSwitch: () => null,
-	handlePunctuationSwitch: () => null,
+	gameMode: "",
+	handleMode: () => null,
 	handleTimerIntervalChange: () => null,
-	handleGameStart: () => null,
-	handleSetSelectedText: () => null
+	handleGameStatus: () => null,
+	handleSetSelectedText: () => null,
+	handleGameRestart: () => null,
+	handleGameMode: () => null
 });
 
 const AppContextProvider = ({ children }) => {
-	const [punctuationSwitch, setPunctuationSwitch] = useState(false);
-	const [numbersSwitch, setNumbersSwitch] = useState(false);
-	const [timerInterval, setTimerInterval] = useState(DEFAULT_TIMER_INTERVAL);
-	const [selectedText, setSelectedText] = useState(DEFAULT_SENTENCE);
-	const [gameStart, setGameStart] = useState("not started");
+	const [mode, setMode] = useState(localStorage.getItem("mode") || "plain");
+	const [timerInterval, setTimerInterval] = useState(+(localStorage.getItem("timer_interval") || "15"));
+	const [selectedText, setSelectedText] = useState(getSelectedText());
+	const [gameMode, setGameMode] = useState(localStorage.getItem("difficulty") || "easy");
+	const [gameStatus, setGameStatus] = useState("not started");
+
+	function getSelectedText() {
+		const difficulty = localStorage.getItem("difficulty").toLowerCase() || gameMode;
+		const mode = localStorage.getItem("mode") || mode;
+		const length = SENTENCES[difficulty][mode].length;
+		const sentence = SENTENCES[difficulty][mode][Math.floor(Math.random() * length)];
+
+		return sentence;
+	}
 
 	useEffect(() => {
 		let interval;
 
-		if (gameStart === "started") {
+		if (gameStatus === "started") {
 			interval = setInterval(() => {
 				setTimerInterval(prevRemainingTime => {
 					if (prevRemainingTime <= 1) {
 						clearInterval(interval);
+						handleGameStatus("finished");
 						return 0;
 					}
 					return prevRemainingTime - 1;
 				});
 			}, 1000);
-
-			setGameStart("over");
 		}
 		return () => clearInterval(interval);
-	}, [gameStart]);
+	}, [gameStatus]);
 
-	function handlePunctuationSwitch() {
-		setPunctuationSwitch(prev => !prev);
-	}
-
-	function handleNumbersSwitch() {
-		setNumbersSwitch(prev => !prev);
+	function handleMode(mode) {
+		localStorage.setItem("mode", mode);
+		setMode(mode);
+		handleGameRestart();
 	}
 
 	function handleTimerIntervalChange(newInterval) {
-		if (!gameStart) return;
+		localStorage.setItem("timer_interval", newInterval);
 		setTimerInterval(newInterval);
+		handleGameRestart();
 	}
 
-	function handleGameStart(option) {
-		console.log(gameStart);
-		setGameStart(option);
+	function handleGameStatus(option) {
+		setGameStatus(option);
+	}
+
+	function handleGameMode(mode) {
+		localStorage.setItem("difficulty", mode);
+		setGameMode(mode);
+		handleGameRestart();
 	}
 
 	function handleSetSelectedText(newText) {
 		setSelectedText(newText);
 	}
 
+	function handleGameRestart() {
+		setSelectedText(getSelectedText());
+		setGameStatus("not started");
+	}
+
 	const ctxValue = {
-		punctuationSwitch,
-		numbersSwitch,
+		mode,
 		timerInterval,
 		selectedText,
-		handleNumbersSwitch,
-		handlePunctuationSwitch,
+		gameStatus,
+		gameMode,
+		handleMode,
 		handleTimerIntervalChange,
-		handleGameStart,
-		handleSetSelectedText
+		handleGameStatus,
+		handleSetSelectedText,
+		handleGameRestart,
+		handleGameMode
 	}
 
 	return <AppCtx.Provider value={ctxValue}>
